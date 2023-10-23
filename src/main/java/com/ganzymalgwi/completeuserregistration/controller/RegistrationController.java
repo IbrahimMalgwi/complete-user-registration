@@ -23,7 +23,6 @@ public class RegistrationController {
     public String registerUser(RegistrationRequest registrationRequest,
                                final HttpServletRequest request){
         User user = userService.registerUser(registrationRequest);
-
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "Registration successful, please check your email to complete";
 

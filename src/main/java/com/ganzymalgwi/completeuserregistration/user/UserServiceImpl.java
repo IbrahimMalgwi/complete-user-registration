@@ -2,6 +2,8 @@ package com.ganzymalgwi.completeuserregistration.user;
 
 import com.ganzymalgwi.completeuserregistration.exception.UserAlreadyExistsException;
 import com.ganzymalgwi.completeuserregistration.registration.RegistrationRequest;
+import com.ganzymalgwi.completeuserregistration.registration.token.VerificationToken;
+import com.ganzymalgwi.completeuserregistration.registration.token.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenRepository tokenRepository;
 
     @Override
     public List<User> getUsers() {
@@ -40,5 +43,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public void saveUserVerificationToken(User theUser, String token) {
+        var verificationToken = new VerificationToken(token, theUser);
+        tokenRepository.save(verificationToken);
     }
 }
